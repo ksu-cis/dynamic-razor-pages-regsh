@@ -20,6 +20,11 @@ namespace Movies.Pages
         public string[] MPAARatings { get; set; }
 
         /// <summary>
+        /// The genres by which the database should be filtered
+        /// </summary>
+        public string[] Genres { get; set; }
+
+        /// <summary>
         /// The movies to display on the index page
         /// </summary>
         public IEnumerable<Movie> Movies { get; protected set; }
@@ -30,8 +35,10 @@ namespace Movies.Pages
         {
             SearchTerms = Request.Query["SearchTerms"];
             MPAARatings = Request.Query["MPAARatings"];
+            Genres = Request.Query["Genres"];
             Movies = MovieDatabase.Search(SearchTerms);
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARatings);
+            Movies = MovieDatabase.FilterByGenre(Movies, Genres);
         }
 
     }

@@ -106,5 +106,20 @@ namespace Movies
             return results;
         }
 
+        public static IEnumerable<Movie> FilterByGenre(IEnumerable<Movie> movies, IEnumerable<string> genres)
+        {
+            if (genres == null || genres.Count() == 0) return movies;
+
+            List<Movie> results = new List<Movie>();
+            foreach(Movie movie in movies)
+            {
+                if(movie.MajorGenre != null && genres.Contains(movie.MajorGenre))
+                {
+                    results.Add(movie);
+                }
+            }
+            return results;
+        }
+
     }
 }
