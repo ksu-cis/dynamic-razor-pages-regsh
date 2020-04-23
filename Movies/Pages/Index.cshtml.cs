@@ -1,45 +1,59 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections.Generic;
 
 namespace Movies.Pages
 {
     public class IndexModel : PageModel
     {
         /// <summary>
-        /// Terms being searched for in Movie title list
+        /// The current search terms 
         /// </summary>
-        public string SearchTerms { get; set; }
+        public string SearchTerms { get; set; } = "";
 
         /// <summary>
-        /// The ratings by which the database should be filtered
+        /// The filtered MPAA Ratings
         /// </summary>
         public string[] MPAARatings { get; set; }
 
         /// <summary>
-        /// The genres by which the database should be filtered
+        /// The filtered genres
         /// </summary>
         public string[] Genres { get; set; }
+
+        /// <summary>
+        /// The minimum IMDB Rating
+        /// </summary>
+        public double? IMDBMin { get; set; }
+
+        /// <summary>
+        /// The maximum IMDB Rating
+        /// </summary>
+        public double? IMDBMax { get; set; }
+
 
         /// <summary>
         /// The movies to display on the index page
         /// </summary>
         public IEnumerable<Movie> Movies { get; protected set; }
+
         /// <summary>
-        /// Invoked every time a GET requestion is made for the page
+        /// Does the response initialization for incoming GET requests
         /// </summary>
-        public void OnGet()
+        public void OnGet(double? IMDBMin, double? IMDBMax)
         {
             SearchTerms = Request.Query["SearchTerms"];
             MPAARatings = Request.Query["MPAARatings"];
             Genres = Request.Query["Genres"];
+            // Nullable conversion workaround
+            this.IMDBMin = IMDBMin;
+            this.IMDBMax = IMDBMax;
             Movies = MovieDatabase.Search(SearchTerms);
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARatings);
             Movies = MovieDatabase.FilterByGenre(Movies, Genres);
+            Movies = MovieDatabase.FilterByIMDBRating(Movies, IMDBMin, IMDBMax);
         }
+
 
     }
 }

@@ -3,6 +3,12 @@ form#movie-database {
     grid-template-columns: 1fr 3fr;
     grid-template-rows: auto auto;
 }
+#search {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    text-align: center;
+}
+
 #filters {
     display: flex;
     flex-direction: column;

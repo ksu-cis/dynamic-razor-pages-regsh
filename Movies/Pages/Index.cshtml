@@ -16,7 +16,7 @@
         @foreach (String rating in MovieDatabase.MPAARatings)
         {
             <label>
-                <input type="checkbox" name="MPAARatings" value="@rating" checked="@Model.MPAARatings.Contains(rating)" />
+                <input type="checkbox" name="MPAARatings" value="@rating" checked="@Model.MPAARatings?.Contains(rating)"/>
                 @rating
             </label>
         }
@@ -25,7 +25,7 @@
         @foreach (String genre in MovieDatabase.Genres)
         {
             <label>
-                <input type="checkbox" name="Genres" value="@genre" checked="@Model.Genres.Contains(genre)"/>
+                <input type="checkbox" name="Genres" value="@genre" checked="@Model.Genres?.Contains(genre)" />
                 @genre
             </label>
         }
