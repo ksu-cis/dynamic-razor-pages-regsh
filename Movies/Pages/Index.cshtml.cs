@@ -31,6 +31,17 @@ namespace Movies.Pages
         /// </summary>
         public double? IMDBMax { get; set; }
 
+        /// <summary>
+        /// The minimum RottenTomatoes rating set by the user
+        /// </summary>
+        [BindProperty (SupportsGet =true)]
+        public double? TomatoesMin { get; set; }
+
+        /// <summary>
+        /// The maximum RottenTomatoes rating set by the user
+        /// </summary>
+        [BindProperty (SupportsGet =true)]
+        public double? TomatoesMax { get; set; }
 
         /// <summary>
         /// The movies to display on the index page
@@ -52,6 +63,7 @@ namespace Movies.Pages
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARatings);
             Movies = MovieDatabase.FilterByGenre(Movies, Genres);
             Movies = MovieDatabase.FilterByIMDBRating(Movies, IMDBMin, IMDBMax);
+            Movies = MovieDatabase.FilterByTomatoes(Movies, TomatoesMin, TomatoesMax);
         }
 
 

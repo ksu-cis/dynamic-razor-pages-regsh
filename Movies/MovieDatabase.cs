@@ -107,6 +107,8 @@ namespace Movies
             return results;
         }
 
+
+
         public static IEnumerable<Movie> FilterByGenre(IEnumerable<Movie> movies, IEnumerable<string> genres)
         {
             if (genres == null || genres.Count() == 0) return movies;
@@ -121,7 +123,39 @@ namespace Movies
             }
             return results;
         }
+        public static IEnumerable<Movie> FilterByTomatoes(IEnumerable<Movie> movies, double? min, double? max)
+        {
+            if (min == null && max == null) return movies;
+            var results = new List<Movie>();
 
+            if (min == null)
+            {
+                foreach (Movie movie in movies)
+                {
+                    if (movie.RottenTomatoesRating <= max) results.Add(movie);
+                }
+                return results;
+            }
+
+            if (max == null)
+            {
+                foreach (Movie movie in movies)
+                {
+                    if (movie.RottenTomatoesRating >= min) results.Add(movie);
+                }
+                return results;
+            }
+
+            foreach(Movie movie in movies)
+            {
+                if (movie.RottenTomatoesRating >= min && movie.RottenTomatoesRating <= max)
+                {
+                    results.Add(movie);
+                }
+                
+            }
+            return results;
+        }
         /// <summary>
         /// Filters the provided collection of movies 
         /// to those with IMDB ratings falling within 
