@@ -65,7 +65,5 @@ namespace Movies.Pages
             Movies = MovieDatabase.FilterByIMDBRating(Movies, IMDBMin, IMDBMax);
             Movies = MovieDatabase.FilterByTomatoes(Movies, TomatoesMin, TomatoesMax);
         }
-
-
     }
 }
