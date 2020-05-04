@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Movies.Pages
 {
@@ -53,17 +54,85 @@ namespace Movies.Pages
         /// </summary>
         public void OnGet(double? IMDBMin, double? IMDBMax)
         {
+            
             SearchTerms = Request.Query["SearchTerms"];
             MPAARatings = Request.Query["MPAARatings"];
             Genres = Request.Query["Genres"];
+            
             // Nullable conversion workaround
             this.IMDBMin = IMDBMin;
             this.IMDBMax = IMDBMax;
+            /*
             Movies = MovieDatabase.Search(SearchTerms);
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARatings);
             Movies = MovieDatabase.FilterByGenre(Movies, Genres);
             Movies = MovieDatabase.FilterByIMDBRating(Movies, IMDBMin, IMDBMax);
             Movies = MovieDatabase.FilterByTomatoes(Movies, TomatoesMin, TomatoesMax);
+            */
+
+            Movies = MovieDatabase.All;
+            if(SearchTerms != null)
+            {
+                Movies = Movies.Where(movie =>
+                    movie.Title != null &&
+                    movie.Title.Contains(SearchTerms, System.StringComparison.InvariantCultureIgnoreCase));
+            }
+
+            if(MPAARatings != null && MPAARatings.Length > 0)
+            {
+                Movies = Movies.Where(movie =>
+                    movie.MPAARating != null &&
+                    MPAARatings.Contains(movie.MPAARating)
+                    );
+            }
+
+            if(Genres != null && Genres.Length > 0)
+            {
+                Movies = Movies.Where(movie =>
+                    movie.MajorGenre != null &&
+                    Genres.Contains(movie.MajorGenre)
+                    );
+            }
+
+            if(!(IMDBMin == null && IMDBMax == null))
+            {
+                if(IMDBMin == null)
+                {
+                    Movies = Movies.Where(movie =>
+                        movie.IMDBRating <= IMDBMax);
+                }
+                else if(IMDBMax == null)
+                {
+                    Movies = Movies.Where(movie =>
+                        movie.IMDBRating >= IMDBMin);
+                }
+                else
+                {
+                    Movies = Movies.Where(movie =>
+                        movie.IMDBRating >= IMDBMin &&
+                        movie.IMDBRating <= IMDBMax);
+                }
+            }
+
+            if (!(TomatoesMin == null && TomatoesMax == null))
+            {
+                if (TomatoesMin == null)
+                {
+                    Movies = Movies.Where(movie =>
+                        movie.RottenTomatoesRating <= TomatoesMax);
+                }
+                else if (TomatoesMax == null)
+                {
+                    Movies = Movies.Where(movie =>
+                        movie.RottenTomatoesRating >= TomatoesMin);
+                }
+                else
+                {
+                    Movies = Movies.Where(movie =>
+                        movie.RottenTomatoesRating >= TomatoesMin &&
+                        movie.RottenTomatoesRating <= TomatoesMax);
+                }
+            }
         }
     }
 }
